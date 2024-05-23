@@ -8,7 +8,7 @@ on:
   schedule:
     - cron: '1 23 * * 0-4'
 jobs:
-  Build:
+  BuildAndTest:
     runs-on: ubuntu-latest
     env:
       GITHUB_LOGIN: ${{ github.actor }}
@@ -26,21 +26,7 @@ jobs:
         run: |
           chmod +x gradlew        
           ./gradlew assemble
-  Test:
-    runs-on: ubuntu-latest
-    env:
-      GITHUB_LOGIN: ${{ github.actor }}
-      GITHUB_PACKAGES: ${{ secrets.GITHUB_TOKEN }}
-      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
-    steps:
-      - name: Clonando el repositorio y estableciendo el espacio de trabajo
-        uses: actions/checkout@v3
-      - name: Configurando java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '16'
-      - name: Ejecutando los test
+      - name: Test de la aplicación
         run: |
           chmod +x gradlew
           ./gradlew test
