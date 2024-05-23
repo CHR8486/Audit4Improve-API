@@ -1,0 +1,24 @@
+name: Demonstrative workflow for uvus user CHR8486
+on: 
+    issues:
+        types: [opened, edited, transferred, reopened]
+
+jobs:
+  LintGradle:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_LOGIN: ${{ github.actor }}
+      GITHUB_PACKAGES: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Cloning the repository and setting the workspace
+        uses: actions/checkout@v3
+      - name: Configuring the java version to 16 with Temurin
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '16'
+      - name: Construyendo el código
+        run: |
+          chmod +x gradlew        
+          ./gradlew lintGradle
