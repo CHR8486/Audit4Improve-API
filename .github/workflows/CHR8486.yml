@@ -5,21 +5,9 @@ on:
         types: [opened, edited, transferred, reopened]
 
 jobs:
-  LintGradle:
+  misc:
     runs-on: ubuntu-latest
-    env:
-      GITHUB_LOGIN: ${{ github.actor }}
-      GITHUB_PACKAGES: ${{ secrets.GITHUB_TOKEN }}
-      GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - name: Cloning the repository and setting the workspace
-        uses: actions/checkout@v3
-      - name: Configuring the java version to 16 with Temurin
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '16'
-      - name: Construyendo el código
+      - name: Printing the name of the trigger
         run: |
-          chmod +x gradlew        
-          ./gradlew lintGradle
+          echo "The trigger is ${{ github.event_name }}, and said action was triggered by ${{ github.actor }}."
