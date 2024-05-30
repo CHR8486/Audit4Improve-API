@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.kohsuke.github.GHCommit;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHRepositoryStatistics;
 import org.kohsuke.github.GHRepositoryStatistics.CodeFrequency;
@@ -213,7 +214,24 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 		case "totalDeletions":
 			metric = getTotalDeletions(remoteRepo);
 			break;
-		// TODO Add support for metrics needed in the project
+		// Begin: RepositoryIndicatorStrategy metrics
+		case "conventionalCommits":
+			metric = getConventionalCommits(remoteRepo);
+			break;
+		case "commitsWithDescription":
+			metric = getCommitsWithDescription(remoteRepo);
+			break;
+		case "issuesWithLabels":
+			metric = getIssuesWithLabels(remoteRepo);
+			break;
+		case "gitFlowBranches":
+			metric = getGitFlowBranches(remoteRepo);
+			break;
+		case "conventionalPullRequests":
+			metric = getConventionalPullRequests(remoteRepo);
+			break;
+		// End: RepositoryIndicatorStrategy metrics
+
 		default:
 			throw new MetricException("La métrica " + metricName + " no está definida para un repositorio");
 		}
@@ -225,6 +243,71 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 	 * A partir de aquí los algoritmos específicos para hacer las consultas de cada
 	 * métrica
 	 */
+
+	private ReportItem<Double> getConventionalCommits(GHRepository remoteRepo) throws MetricException {
+		ReportItem<Double> metric = null;
+
+		// Query the commits in the last month to check if they are conventional
+		List<GHCommit> commits;
+		try {
+			commits = remoteRepo
+			.queryCommits()
+			.since(new Date(System.currentTimeMillis() - 30 * 24 * 60 * 60 * 1000))
+			.list().toList();
+
+			// Calculate the ratio of conventional commits
+			Double conventionalRatio;
+			if (commits.size() == 0) {
+				conventionalRatio = 0.0;
+			} else {
+				int conventionalCommits = 0;
+				for (GHCommit commit : commits) {
+					if (commit.getCommitShortInfo().getMessage().matches("^(revert: )?(feat|fix|docs|style|refactor|perf|test|chore)(\\(.+\\))?: .{1,50}")) {
+						conventionalCommits++;
+					}
+				}
+				conventionalRatio = (double) conventionalCommits / commits.size();
+			}
+
+			// Create the metric
+			ReportItemBuilder<Double> conventionalCommitsMetric = new ReportItem.ReportItemBuilder<Double>("conventionalCommits", conventionalRatio);
+			conventionalCommitsMetric.source("GitHub, calculada")
+					.description("Número de commits convencionales en el último mes");
+		} catch (IOException e) {
+			throw new MetricException("Error al consultar los commits del repositorio");
+		} catch (ReportItemException e) {
+			throw new MetricException("Error al crear la métrica");
+		}
+		return metric;
+	}
+
+	private ReportItem<Double> getCommitsWithDescription(GHRepository remoteRepo) throws MetricException {
+		ReportItem<Double> metric = null;
+
+		// TODO Implement the logic to get the metric
+		return metric;
+	}
+
+	private ReportItem<Double> getIssuesWithLabels(GHRepository remoteRepo) throws MetricException {
+		ReportItem<Double> metric = null;
+
+		// TODO Implement the logic to get the metric
+		return metric;
+	}
+
+	private ReportItem<Double> getGitFlowBranches(GHRepository remoteRepo) throws MetricException {
+		ReportItem<Double> metric = null;
+
+		// TODO Implement the logic to get the metric
+		return metric;
+	}
+
+	private ReportItem<Double> getConventionalPullRequests(GHRepository remoteRepo) throws MetricException {
+		ReportItem<Double> metric = null;
+
+		// TODO Implement the logic to get the metric
+		return metric;
+	}
 
 	/**
 	 * <p>
