@@ -1,5 +1,7 @@
 package us.muit.fs.a4i.test.control;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
@@ -11,9 +13,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kohsuke.github.GHBranch;
-import org.kohsuke.github.GHCommit;
-import org.kohsuke.github.GHIssue;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.junit.jupiter.api.Assertions;
@@ -26,17 +25,6 @@ public class RepositoryIndicatorStrategyTest {
     // MARK: - Attributes
     // The indicator strategy to be tested
     static RepositoryIndicatorStrategy repositoryIndicatorStrategy;
-    // Mocks
-    @Mock
-    static ReportItemI<Double> mockConventionalCommits;
-    @Mock
-    static ReportItemI<Double> mockCommitsWithDescription;
-    @Mock
-    static ReportItemI<Double> mockIssuesWithLabels;
-    @Mock
-    static ReportItemI<Double> mockGitFlowBranches;
-    @Mock
-    static ReportItemI<Double> mockConventionalPullRequests;
     // The expected calculation of the indicator
     static Double calculation;
 
@@ -50,29 +38,8 @@ public class RepositoryIndicatorStrategyTest {
         // Create the indicator strategy, here we use the default weights
         repositoryIndicatorStrategy = new RepositoryIndicatorStrategy();
 
-        // Mock the required metrics
-        mockConventionalCommits = Mockito.mock(ReportItemI.class);
-        mockCommitsWithDescription = Mockito.mock(ReportItemI.class);
-        mockIssuesWithLabels = Mockito.mock(ReportItemI.class);
-        mockGitFlowBranches = Mockito.mock(ReportItemI.class);
-        mockConventionalPullRequests = Mockito.mock(ReportItemI.class);
-
-        // Mock the metric values
-        when(mockConventionalCommits.getValue()).thenReturn(0.86);
-        when(mockCommitsWithDescription.getValue()).thenReturn(0.84);
-        when(mockIssuesWithLabels.getValue()).thenReturn(0.92);
-        when(mockGitFlowBranches.getValue()).thenReturn(0.85);
-        when(mockConventionalPullRequests.getValue()).thenReturn(0.98);
-
         // Based on the provided metrics, the indicator should be calculated as follows:
         calculation = (0.2 * 0.86) + (0.2 * 0) + (0.2 * 0.92) + (0.2 * 0) + (0.2 * 0.98);
-
-        // Mock the metric names
-        when(mockConventionalCommits.getName()).thenReturn("conventionalCommits");
-        when(mockCommitsWithDescription.getName()).thenReturn("commitsWithDescription");
-        when(mockIssuesWithLabels.getName()).thenReturn("issuesWithLabels");
-        when(mockGitFlowBranches.getName()).thenReturn("gitFlowBranches");
-        when(mockConventionalPullRequests.getName()).thenReturn("conventionalPullRequests");
 	}
 
 	/**
@@ -113,6 +80,25 @@ public class RepositoryIndicatorStrategyTest {
      */
     @Test
     public void testCalcIndicator() throws NotAvailableMetricException {
+        // Mock the required metrics
+        ReportItemI<Double> mockConventionalCommits = Mockito.mock(ReportItemI.class);
+        ReportItemI<Double> mockCommitsWithDescription = Mockito.mock(ReportItemI.class);
+        ReportItemI<Double> mockIssuesWithLabels = Mockito.mock(ReportItemI.class);
+        ReportItemI<Double> mockGitFlowBranches = Mockito.mock(ReportItemI.class);
+        ReportItemI<Double> mockConventionalPullRequests = Mockito.mock(ReportItemI.class);
+
+        // Mock the metric values
+        when(mockConventionalCommits.getValue()).thenReturn(0.86);
+        when(mockCommitsWithDescription.getValue()).thenReturn(0.84);
+        when(mockIssuesWithLabels.getValue()).thenReturn(0.92);
+        when(mockGitFlowBranches.getValue()).thenReturn(0.85);
+        when(mockConventionalPullRequests.getValue()).thenReturn(0.98);
+        // Mock the metric names
+        when(mockConventionalCommits.getName()).thenReturn("conventionalCommits");
+        when(mockCommitsWithDescription.getName()).thenReturn("commitsWithDescription");
+        when(mockIssuesWithLabels.getName()).thenReturn("issuesWithLabels");
+        when(mockGitFlowBranches.getName()).thenReturn("gitFlowBranches");
+        when(mockConventionalPullRequests.getName()).thenReturn("conventionalPullRequests");
         // Set up the list of metrics
         List<ReportItemI<Double>> metrics = Arrays.asList(
             mockConventionalCommits,
@@ -123,10 +109,19 @@ public class RepositoryIndicatorStrategyTest {
         );
 
         // Calculate the indicator output
+        assertDoesNotThrow(() -> {
+            repositoryIndicatorStrategy.calcIndicator(metrics);
+        }, "The calculation threw an exception, which it should not.");
+
         ReportItemI<Double> result = repositoryIndicatorStrategy.calcIndicator(metrics);
 
+        assertNotNull(result, "The indicator result is null.");
+
         // Check the result
-        Assertions.assertEquals("RepositoryIndicatorStrategy", result.getName(), "The indicator name is not correct.");
+        Assertions.assertEquals(RepositoryIndicatorStrategy.ID, 
+        result.getName(), 
+        "The indicator name is not correct, expected: " + RepositoryIndicatorStrategy.ID + ", but was: " + result.getName());
+        
         Assertions.assertEquals(calculation, result.getValue(), "The indicator value from the calculation is not correct.");
     }
 
@@ -135,17 +130,29 @@ public class RepositoryIndicatorStrategyTest {
      */
     @Test
     public void testCalcIndicatorThrowsNotAvailableMetricException() {
-        Random random = new Random();
+        // Mock the required metrics
+        ReportItemI<Double> mockConventionalCommits = Mockito.mock(ReportItemI.class);
+        ReportItemI<Double> mockCommitsWithDescription = Mockito.mock(ReportItemI.class);
+        ReportItemI<Double> mockIssuesWithLabels = Mockito.mock(ReportItemI.class);
+        ReportItemI<Double> mockConventionalPullRequests = Mockito.mock(ReportItemI.class);
+
+        // Mock the metric values
+        when(mockConventionalCommits.getValue()).thenReturn(0.86);
+        when(mockCommitsWithDescription.getValue()).thenReturn(0.84);
+        when(mockIssuesWithLabels.getValue()).thenReturn(0.92);
+        when(mockConventionalPullRequests.getValue()).thenReturn(0.98);
+        // Mock the metric names
+        when(mockConventionalCommits.getName()).thenReturn("conventionalCommits");
+        when(mockCommitsWithDescription.getName()).thenReturn("commitsWithDescription");
+        when(mockIssuesWithLabels.getName()).thenReturn("issuesWithLabels");
+        when(mockConventionalPullRequests.getName()).thenReturn("conventionalPullRequests");
         // Set up the list of metrics
         List<ReportItemI<Double>> metrics = Arrays.asList(
             mockConventionalCommits,
             mockCommitsWithDescription,
             mockIssuesWithLabels,
-            mockGitFlowBranches,
             mockConventionalPullRequests
         );
-        // Remove one of the required metrics
-        metrics.remove(random.nextInt(metrics.size()));
 
         // Check that the method throws the expected exception
         Assertions.assertThrows(NotAvailableMetricException.class, () -> {
@@ -158,7 +165,7 @@ public class RepositoryIndicatorStrategyTest {
      */
     @Test
     public void testRequiredMetrics() {
-        List<String> expectedRequirements = Arrays.asList("queryCommits", "issues", "branches", "pullRequests");
+        List<String> expectedRequirements = Arrays.asList("conventionalCommits", "commitsWithDescription", "issuesWithLabels", "gitFlowBranches", "conventionalPullRequests");
 
         for (String requirement : expectedRequirements) {
             Assertions.assertTrue(repositoryIndicatorStrategy.requiredMetrics().contains(requirement),

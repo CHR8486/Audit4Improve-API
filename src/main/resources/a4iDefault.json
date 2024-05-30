@@ -52,6 +52,36 @@
 			"type": "java.lang.Double",
 			"description": "Numero de issues cerradas",
 			"unit": "issues"
+		},
+		{
+			"name": "conventionalCommits",
+			"type": "java.lang.Double",
+			"description": "Ratio de commits convencionales",
+			"unit": "ratio"
+		},
+		{
+			"name": "commitsWithDescription",
+			"type": "java.lang.Double",
+			"description": "Ratio de commits con descripción",
+			"unit": "ratio"
+		},
+		{
+			"name": "issuesWithLabels",
+			"type": "java.lang.Double",
+			"description": "Ratio de issues con más de una etiqueta",
+			"unit": "ratio"
+		},
+		{
+			"name": "gitFlowBranches",
+			"type": "java.lang.Double",
+			"description": "Ratio de ramas que siguen gitflow",
+			"unit": "ratio"
+		},
+		{
+			"name": "conventionalPullRequests",
+			"type": "java.lang.Double",
+			"description": "Ratio de PRs convencionales",
+			"unit": "ratio"
 		}
 	],
 	"indicators": [{
