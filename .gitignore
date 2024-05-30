@@ -42,3 +42,4 @@ gradle.properties
 *.xls
 /javadoc.xml
 .vscode/settings.json
+.DS_Store

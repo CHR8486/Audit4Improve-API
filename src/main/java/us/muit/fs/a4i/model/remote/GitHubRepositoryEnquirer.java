@@ -288,6 +288,7 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 			ReportItemBuilder<Double> conventionalCommitsMetric = new ReportItem.ReportItemBuilder<Double>("conventionalCommits", conventionalRatio);
 			conventionalCommitsMetric.source("GitHub, calculada")
 					.description("Número de commits convencionales en el último mes");
+			metric = conventionalCommitsMetric.build();
 		} catch (IOException e) {
 			throw new MetricException("Error al consultar los commits del repositorio");
 		} catch (ReportItemException e) {
@@ -335,6 +336,7 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 			ReportItemBuilder<Double> commitsWithDescriptionMetric = new ReportItem.ReportItemBuilder<Double>("commitsWithDescription", commitsWithDescriptionRatio);
 			commitsWithDescriptionMetric.source("GitHub, calculada")
 					.description("Número de commits con descripción en el último mes");
+			metric = commitsWithDescriptionMetric.build();
 		} catch (IOException e) {
 			throw new MetricException("Error al consultar los commits del repositorio");
 		} catch (ReportItemException e) {
@@ -368,15 +370,12 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 			if (issues.size() > 0) {
 				int issuesWithLabels = issues.stream().filter(issue -> issue.getLabels().size() > 0).toList().size();
 				issuesWithLabelsRatio = (double) issuesWithLabels / issues.size();
-				metric = new ReportItem.ReportItemBuilder<Double>("issuesWithLabels", issuesWithLabelsRatio)
-						.source("GitHub, calculada")
-						.description("Número de issues con etiquetas en el repositorio")
-						.build();
 			}
 			
 			ReportItemBuilder<Double> issuesWithLabelsMetric = new ReportItem.ReportItemBuilder<Double>("issuesWithLabels", issuesWithLabelsRatio);
 			issuesWithLabelsMetric.source("GitHub, calculada")
 					.description("Número de issues con etiquetas en el repositorio");
+			metric = issuesWithLabelsMetric.build();
 		} catch (IOException e) {
 			throw new MetricException("Error al consultar los issues del repositorio");
 		} catch (ReportItemException e) {
@@ -415,6 +414,7 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 			ReportItemBuilder<Double> gitFlowBranchesMetric = new ReportItem.ReportItemBuilder<Double>("gitFlowBranches", gitFlowBranchesRatio);
 			gitFlowBranchesMetric.source("GitHub, calculada")
 					.description("Número de ramas que siguen las convenciones de Git Flow en el repositorio");
+			metric = gitFlowBranchesMetric.build();
 		} catch (IOException e) {
 			throw new MetricException("Error al consultar las ramas del repositorio");
 		} catch (ReportItemException e) {
@@ -459,6 +459,7 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 			ReportItemBuilder<Double> conventionalPullRequestsMetric = new ReportItem.ReportItemBuilder<Double>("conventionalPullRequests", conventionalPullRequestsRatio);
 			conventionalPullRequestsMetric.source("GitHub, calculada")
 					.description("Número de pull requests convencionales en el último mes");
+			metric = conventionalPullRequestsMetric.build();
 		} catch (IOException e) {
 			throw new MetricException("Error al consultar los pull requests del repositorio");
 		} catch (ReportItemException e) {
