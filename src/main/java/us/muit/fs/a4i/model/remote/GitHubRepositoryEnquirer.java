@@ -249,6 +249,14 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 	 * métrica
 	 */
 
+	/**
+	 * <p>
+	 * Obtiene el ratio de commits convencionales en el último mes
+	 * </p>
+	 * @param remoteRepo Repositorio remoto
+	 * @return La métrica con el ratio de commits convencionales
+	 * @throws MetricException Si se produce un error al consultar los commits o al crear la métrica
+	 */
 	private ReportItem<Double> getConventionalCommits(GHRepository remoteRepo) throws MetricException {
 		// Attributes
 		ReportItem<Double> metric = null;
@@ -288,6 +296,14 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 		return metric;
 	}
 
+	/**
+	 * <p>
+	 * Obtiene el ratio de commits con descripción en el último mes
+	 * </p>
+	 * @param remoteRepo Repositorio remoto
+	 * @return La métrica con el ratio de commits con descripción
+	 * @throws MetricException Si se produce un error al consultar los commits o al crear la métrica
+	 */
 	private ReportItem<Double> getCommitsWithDescription(GHRepository remoteRepo) throws MetricException {
 		// Attributes
 		ReportItem<Double> metric = null;
@@ -327,6 +343,14 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 		return metric;
 	}
 
+	/**
+	 * <p>
+	 * Obtiene el ratio de issues con etiquetas en el repositorio
+	 * </p>
+	 * @param remoteRepo Repositorio remoto
+	 * @return La métrica con el ratio de issues con etiquetas
+	 * @throws MetricException Si se produce un error al consultar los issues o al crear la métrica
+	 */
 	private ReportItem<Double> getIssuesWithLabels(GHRepository remoteRepo) throws MetricException {
 		// Attributes
 		ReportItem<Double> metric = null;
@@ -361,6 +385,14 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 		return metric;
 	}
 
+	/**
+	 * <p>
+	 * Obtiene el ratio de ramas que siguen las convenciones de Git Flow en el repositorio
+	 * </p>
+	 * @param remoteRepo Repositorio remoto
+	 * @return La métrica con el ratio de ramas que siguen las convenciones de Git Flow
+	 * @throws MetricException Si se produce un error al consultar las ramas o al crear la métrica
+	 */
 	private ReportItem<Double> getGitFlowBranches(GHRepository remoteRepo) throws MetricException {
 		// Attributes
 		ReportItem<Double> metric = null;
@@ -391,6 +423,14 @@ public class GitHubRepositoryEnquirer extends GitHubEnquirer {
 		return metric;
 	}
 
+	/**
+	 * <p>
+	 * Obtiene el ratio de pull requests convencionales en el último mes
+	 * </p>
+	 * @param remoteRepo Repositorio remoto
+	 * @return La métrica con el ratio de pull requests convencionales
+	 * @throws MetricException Si se produce un error al consultar los pull requests o al crear la métrica
+	 */
 	private ReportItem<Double> getConventionalPullRequests(GHRepository remoteRepo) throws MetricException {
 		ReportItem<Double> metric = null;
 		List<GHPullRequest> pullRequests;
