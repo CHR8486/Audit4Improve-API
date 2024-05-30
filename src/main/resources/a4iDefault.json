@@ -101,6 +101,12 @@
 			"type": "java.lang.Double",
 			"description": "Ratio de issues abiertos frente a cerrados",
 			"unit": "ratio"
+		},
+		{
+			"name": "repositoryIndicator",
+			"type": "java.lang.Double",
+			"description": "Indicador general del repositorio",
+			"unit": "ratio"
 		}
 	]
 }
